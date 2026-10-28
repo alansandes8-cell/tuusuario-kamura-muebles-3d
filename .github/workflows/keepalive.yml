@@ -1,0 +1,14 @@
+# El plan gratuito de Supabase pausa los proyectos sin actividad durante 7 días.
+# Este flujo consulta /api/health una vez por día (hace una consulta a la base).
+# Configurar la variable del repositorio APP_URL (Settings > Secrets and variables > Actions > Variables).
+name: Mantener activa la base
+on:
+  schedule:
+    - cron: "17 11 * * *"
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    if: ${{ vars.APP_URL != '' }}
+    steps:
+      - run: curl -fsS "${{ vars.APP_URL }}/api/health"
